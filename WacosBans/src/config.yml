@@ -1,0 +1,11 @@
+# This is the database information this plugin uses to check and register ban information from.
+
+# The address of the target database
+dbhost: none
+
+# The name of the database to use
+dbname: none
+
+# The username and password to connect with
+dbusername: none
+dbpassword: none
