@@ -21,6 +21,7 @@ public class WacosBans extends JavaPlugin implements Listener {
 		if (!checkConfig() || !initDb()) {
 			disablePlugin();
 		}
+		getServer().getPluginManager().registerEvents(this, this);
 	}
 	public boolean checkConfig() {
 		String[] paths = {"dbhost", "dbname", "dbusername", "dbpassword"};
@@ -74,7 +75,7 @@ public class WacosBans extends JavaPlugin implements Listener {
 				}
 
 				if (p != null)
-					p.kickPlayer(ChatColor.YELLOW + "Permanently banned: " + reason);
+					p.kickPlayer("Permanently banned: " + reason);
 			}
 			else {
 				sender.sendMessage(ChatColor.YELLOW + "/ban <player> <reason>");
@@ -104,13 +105,13 @@ public class WacosBans extends JavaPlugin implements Listener {
 					sender.sendMessage(ChatColor.YELLOW + "Invalid value: " + args[1]);
 					return true;
 				}
-				if (args[2].equalsIgnoreCase("hour")) {
+				if (args[2].equalsIgnoreCase("hour") || args[2].equalsIgnoreCase("hours") ||  args[2].equalsIgnoreCase("hr") ||  args[2].equalsIgnoreCase("hrs")) {
 					v *= 60;
 				}
-				else if (args[2].equalsIgnoreCase("day")) {
+				else if (args[2].equalsIgnoreCase("day") || args[2].equalsIgnoreCase("days")) {
 					v *= 60 * 24;
 				}
-				else if (!args[2].equalsIgnoreCase("min")) {
+				else if (!args[2].equalsIgnoreCase("min") && !args[2].equalsIgnoreCase("mins") && !args[2].equalsIgnoreCase("minute") && !args[2].equalsIgnoreCase("minutes")) {
 					sender.sendMessage(ChatColor.YELLOW + "Invalid unit: " + args[2]);
 					return true;
 				}
@@ -148,7 +149,7 @@ public class WacosBans extends JavaPlugin implements Listener {
 
 			if (args.length >= 2) {
 				String reason = "";
-				for (int t = 2; t < args.length; t++) {
+				for (int t = 1; t < args.length; t++) {
 					if (t != args.length - 1)
 						reason += args[t] + " ";
 					else reason += args[t];
@@ -184,9 +185,7 @@ public class WacosBans extends JavaPlugin implements Listener {
 	@EventHandler
 	void onPlayerLogin(PlayerLoginEvent e) {
 		if (SQLManager.isBanned(e.getPlayer().getName())) {
-			if(!(e.getPlayer().isOp())) {
-				e.disallow(PlayerLoginEvent.Result.KICK_BANNED, SQLManager.getBanMessage(e.getPlayer().getName()));
-			}
+			e.disallow(PlayerLoginEvent.Result.KICK_BANNED, SQLManager.getBanMessage(e.getPlayer().getName()));
 		}
 	}
 }

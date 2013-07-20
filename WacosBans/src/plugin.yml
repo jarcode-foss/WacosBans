@@ -26,3 +26,13 @@ commands:
      description: Dumps a player's ban/tempban/warning history
      aliases: [history]
      permission: wacosbans.dump
+permissions:
+   wacosbans.*:
+     description: Gives access to all WacosBans commands
+     children:
+       wacosbans.ban: true
+       wacosbans.tempban: true
+       wacosbans.disabled: true
+       wacosbans.warn: true
+       wacosbans.pardon: true
+       wacosbans.dump: true

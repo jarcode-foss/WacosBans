@@ -276,7 +276,6 @@ public class SQLManager {
 
 			while (result.next()) {
 				if (result.getBoolean("active")) {
-					pst.close();
 					pst = getConnection().prepareStatement("UPDATE bans SET active = ?, pardoner = ? WHERE player = ?");
 					pst.setInt(1, 0);
 					pst.setString(2, pardoner);
@@ -285,6 +284,7 @@ public class SQLManager {
 					removed = true;
 				}
 			}
+			pst.close();
 
 			pst.close();
 			result.close();
@@ -294,7 +294,6 @@ public class SQLManager {
 
 			while (result.next()) {
 				if (result.getBoolean("active")) {
-					pst.close();
 					pst = getConnection().prepareStatement("UPDATE tempbans SET active = ?, pardoner = ? WHERE player = ?");
 					pst.setInt(1, 0);
 					pst.setString(2, pardoner);
@@ -402,7 +401,7 @@ public class SQLManager {
 			result.close();
 			pst = getConnection().prepareStatement("SELECT * FROM tempbans WHERE player = ?");
 			pst.setString(1, player);
-			pst.executeUpdate();
+			result = pst.executeQuery();
 
 			while (result.next()) {
 				if (result.getBoolean("active")) {
